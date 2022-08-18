@@ -1,5 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import Home from './Pages/Home';
+import PlanetsProvider from './contexts/PlanetsProvider';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <PlanetsProvider>
+    <Home />
+  </PlanetsProvider>,
+  document.getElementById('root'),
+);
