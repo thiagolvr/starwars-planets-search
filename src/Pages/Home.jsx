@@ -3,9 +3,10 @@ import '../styles/App.css';
 import planetsAPI from '../services/planetsAPI';
 import PlanetsContext from '../contexts/PlanetsContext';
 import Table from '../components/Table';
+import Form from '../components/Form';
 
 const Home = () => {
-  const { planetsInfo, setPlanetsInfo } = useContext(PlanetsContext);
+  const { setPlanetsInfo } = useContext(PlanetsContext);
 
   useEffect(() => {
     const fetchPlanets = async () => {
@@ -17,8 +18,9 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
-      <Table planetsInfo={ planetsInfo } />
+    <div className="App">
+      <Form />
+      <Table />
     </div>
   );
 };
