@@ -1,9 +1,32 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import PlanetsContext from '../contexts/PlanetsContext';
 
 const Table = () => {
-  const { planetsInfo, filterByName } = useContext(PlanetsContext);
+  const {
+    planetsInfo,
+    filterByName,
+    filteredPlanetsInfo,
+    setFilteredPlanetsInfo,
+    filterByNumericValues,
+  } = useContext(PlanetsContext);
+
+  useEffect(() => {
+    const filteredPlanetsByName = planetsInfo.filter(({ name }) => name.toLowerCase()
+      .includes(filterByName.name.toLowerCase()));
+
+    const planetsWithActiveFilters = filterByNumericValues
+      .reduce((acc, filter) => acc
+        .filter((planet) => (
+          {
+            'maior que': +planet[filter.column] > +filter.value,
+            'menor que': +planet[filter.column] < +filter.value,
+            'igual a': +planet[filter.column] === +filter.value,
+          }[filter.comparison]
+        )), filteredPlanetsByName);
+
+    setFilteredPlanetsInfo(planetsWithActiveFilters);
+  }, [planetsInfo, filterByName, setFilteredPlanetsInfo, filterByNumericValues]);
 
   return (
     <table>
@@ -26,9 +49,7 @@ const Table = () => {
       </thead>
       <tbody>
         {
-          planetsInfo
-            .filter(({ name }) => name.toLowerCase()
-              .includes(filterByName.name.toLowerCase()))
+          filteredPlanetsInfo
             .map(({
               climate,
               created,

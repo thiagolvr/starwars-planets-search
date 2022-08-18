@@ -4,13 +4,19 @@ import PlanetsContext from './PlanetsContext';
 
 const PlanetsProvider = ({ children }) => {
   const [planetsInfo, setPlanetsInfo] = useState([]);
+  const [filteredPlanetsInfo, setFilteredPlanetsInfo] = useState([]);
   const [filterByName, setFilterByName] = useState({ name: '' });
+  const [filterByNumericValues, setFilterByNumericValues] = useState([]);
 
   const contextValue = {
     planetsInfo,
     setPlanetsInfo,
     filterByName,
     setFilterByName,
+    filterByNumericValues,
+    setFilterByNumericValues,
+    filteredPlanetsInfo,
+    setFilteredPlanetsInfo,
   };
 
   return (
