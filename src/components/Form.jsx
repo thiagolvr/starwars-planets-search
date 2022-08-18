@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PlanetsContext from '../contexts/PlanetsContext';
 
 const Form = () => {
@@ -15,6 +15,23 @@ const Form = () => {
     setFilterByNumericValues,
   } = useContext(PlanetsContext);
 
+  const activeFilterColumns = filterByNumericValues.map((filter) => filter.column);
+
+  const columnsDynamic = [
+    'population', 'orbital_period', 'diameter',
+    'rotation_period', 'surface_water',
+  ].filter((column) => !activeFilterColumns.includes(column));
+
+  useEffect(() => {
+    setSelected({
+      column: columnsDynamic[0],
+      comparison: 'maior que',
+      value: '0',
+    });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterByNumericValues]);
+
   return (
     <form>
 
@@ -30,21 +47,19 @@ const Form = () => {
 
       <select
         data-testid="column-filter"
-        value={ selected.column }
         onChange={ ({
           target: { value: input },
         }) => setSelected({ ...selected, column: input }) }
       >
-        <option>population</option>
-        <option>orbital_period</option>
-        <option>diameter</option>
-        <option>rotation_period</option>
-        <option>surface_water</option>
+        {
+          columnsDynamic.map((column, index) => (
+            <option key={ index } value={ column }>{column}</option>
+          ))
+        }
       </select>
 
       <select
         data-testid="comparison-filter"
-        value={ selected.comparison }
         onChange={ ({
           target: { value: input },
         }) => setSelected({ ...selected, comparison: input }) }
@@ -72,6 +87,15 @@ const Form = () => {
         ) }
       >
         Filter
+      </button>
+
+      <button
+        data-testid="button-remove-filters"
+        type="button"
+        disabled={ !filterByNumericValues.length }
+        onClick={ () => setFilterByNumericValues([]) }
+      >
+        Delete Active Filters
       </button>
 
     </form>
